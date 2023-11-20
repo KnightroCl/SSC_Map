@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
         <link rel="stylesheet" href="Leaflet.Coordinates-master/dist/Leaflet.Coordinates-0.1.5.css" />
         <link rel="stylesheet" href="Leaflet.Coordinates-master/dist/Leaflet.Coordinates-0.1.5.ie.css" />
+        <link rel="stylesheet" href="Leaflet.Legend-master/src/leaflet.legend.css" />
 
         <style>
 
@@ -430,7 +431,6 @@
         <script src="js/rbush.min.js"></script>
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
-        <!-- <script src="js/leaflet-control-geocoder.Geocoder.js"></script> -->
         <script src="js/leaflet-search.js"></script>
         <script src="data/Comuna_Tarapaca_1.js"></script>
         <script src="data/SitiosSigCultural_2.js"></script>
@@ -444,6 +444,7 @@
         <script src="Leaflet.Coordinates-master/dist/Leaflet.Coordinates-0.1.5.src.js"></script>
         <script src="https://unpkg.com/proj4"></script>
         <script src="https://unpkg.com/proj4leaflet"></script>
+        <script src="Leaflet.Legend-master/src/leaflet.legend.js"></script>
 
         
         
@@ -453,6 +454,8 @@
           var map;
           var localidadesLayers = {};
           let removedLayers = [];
+
+          
       
           function filterByCategoria(categoria) {
           for (const localidad in localidadesLayers) {
@@ -676,9 +679,92 @@ function mymap() {
                       return "X: " + utmCoords[0].toFixed(2) + " Y: " + utmCoords[1].toFixed(2); // Devolver las coordenadas formateadas
                   }
               }).addTo(map); // Agregar el control al mapa
-
-            }
-
+              
+            var legend = L.control.Legend({
+              position: 'bottomleft',
+              collapsed: true,
+              title: 'Leyenda',
+              symbolWidth: 20,
+              opacity: 1,
+              column: 1,
+              legends: [
+                {
+                  label: "Vertiente",
+                  type: "image",
+                  url: "legend/VertienteIcon.png"
+                }, {
+                  label: "Área de cultivos",
+                  type: "image",
+                  url: "legend/Acultivos.png"
+                }, {
+                  label: "Asentamientos",
+                  type: "image",
+                  url: "legend/AsentamientosIcon.png"
+                }, {
+                  label: "Cerro Ceremonial o interfluvio",
+                  type: "image",
+                  url: "legend/CerroCeremonial.png"
+                }, {
+                  label: "Sitio de conflicto",
+                  type: "image",
+                  url: "legend/SConflicto.png"
+                }, {
+                  label: "Minera",
+                  type: "image",
+                  url: "legend/MineraIcon.png"
+                }, {
+                  label: "Red vial",
+                  type: "image",
+                  url: "legend/RedvialIcon.png"
+                }, {
+                  label: "Sitio Religioso",
+                  type: "image",
+                  url: "legend/SReligioso.png"
+                }, {
+                  label: "Sector agrícola",
+                  type: "image",
+                  url: "legend/SectorAgricola.png"
+                }, {
+                  label: "Sector simbólico",
+                  type: "image",
+                  url: "legend/SimbolicoIcon.png"
+                }, {
+                  label: "Sitio arqueológico",
+                  type: "image",
+                  url: "legend/ArqueologicoIcon.png"
+                }, {
+                  label: "Sitio de actividad económica",
+                  type: "image",
+                  url: "legend/AEconomica.png"
+                }, {
+                  label: "Sitio de aprovechamiento hídrico",
+                  type: "image",
+                  url: "legend/SAHidrico.png"
+                }, {
+                  label: "Sitio de aprovechamiento hídrico (Conflictos)",
+                  type: "image",
+                  url: "legend/SAConflicto.png"
+                }, {
+                  label: "Sitios de ocupación histórica",
+                  type: "image",
+                  url: "legend/SOHistorico.png"
+                }, {
+                  label: "Otros",
+                  type: "image",
+                  url: "legend/OtrosIcon.png"
+                }, {
+                  label: "Sitio de paso",
+                  type: "image",
+                  url: "legend/SPaso.png"
+                }, {
+                  label: "Sector Pastoril - Ganadero",
+                  type: "image",
+                  url: "legend/SPastorilIcon.png"
+                }]
+            }).addTo(map);
+          
+          }
+            
     
 
           mymap();
