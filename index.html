@@ -18,16 +18,16 @@
         <link rel="stylesheet" href="Leaflet.Coordinates-master/dist/Leaflet.Coordinates-0.1.5.css" />
         <link rel="stylesheet" href="Leaflet.Coordinates-master/dist/Leaflet.Coordinates-0.1.5.ie.css" />
         <link rel="stylesheet" href="Leaflet.Legend-master/src/leaflet.legend.css" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/leaflet-sidebar.css" />
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
         <style>
 
-        #mapContainer {
-          height: 100%;
+        #map {
+          height: 100vh;
           padding: 1px;
         }
-        #mapContainer #map {
-          height: 100%;
-          }
 
         @media only screen and (max-width: 467px)  {
           #map {
@@ -46,19 +46,7 @@
           background-color: #fff;
           box-sizing: border-box;
         }
-
-        .div {
-          display: block;
-        }
-
-        #map { 
-          border: 0px none;
-          min-height: 410px;
-          border-color: #fff;
-          width: 100%;
-          height: 100%;
-          min-width: 570px;
-        } 
+ 
         </style>
         <style>
 
@@ -131,7 +119,6 @@
               height: 100%;
               font-size: 20px;
               text-align: center;
-              margin-top: 1px;
             }
 
             .centered-text.Sel-localidad{
@@ -155,6 +142,10 @@
               font-size: 20px;
               text-align: center;
               margin-top: 4px;
+            }
+
+            .leaflet-control-scale {
+              margin-left: 6px !important;
             }
 
             .Bienvenidos {
@@ -252,7 +243,7 @@
               border-color: black;
               margin-top: 2px;
             }
-
+            
             .btn-custom {
             background-color: white;
             color: rgb(51, 7, 51);
@@ -286,6 +277,17 @@
             border: 1px solid rgb();
             border-radius: 5px;
             flex: 0 0 calc(66.66% - 6px);
+            cursor: not-allowed;
+            white-space: nowrap; /* Evita que los botones se envuelvan al siguiente renglón */
+            overflow: hidden; /* Oculta el contenido que se desborde del botón */
+            text-overflow: ellipsis; /* Agrega puntos suspensivos para el contenido desbordado */
+            }
+            .btn-custom-all-cat {
+            background-color: white;
+            color: rgb(51, 7, 51);
+            border: 1px solid rgb();
+            border-radius: 5px;
+            flex: 0 0 calc(50% - 3px);
             cursor: not-allowed;
             white-space: nowrap; /* Evita que los botones se envuelvan al siguiente renglón */
             overflow: hidden; /* Oculta el contenido que se desborde del botón */
@@ -349,78 +351,171 @@
             border: 1px solid rgb();
             border-radius: 5px;
             width: 150px;
+            height: 30px; 
+            flex: 0 0 calc(50% - 3px);
             cursor: not-allowed;
             white-space: nowrap; /* Evita que los botones se envuelvan al siguiente renglón */
             overflow: hidden; /* Oculta el contenido que se desborde del botón */
             text-overflow: ellipsis; /* Agrega puntos suspensivos para el contenido desbordado */
             }
+            #descripcion p{
+              padding-top: 10px;
+              font-size: 18px;
+              font-family:Verdana, Geneva, Tahoma;
+              font-weight: 100;
+            }
 
+            table, th, td {
+            border: 2px solid #730577;
+            padding: 5px 4px;
+            width: calc(100% - 15px); 
+            height: calc(100% - 10px);}
         </style>
         <title>Mapa Web SSC</title>
     </head>
     <body>
+<!-- optionally define the sidebar content via HTML markup -->
+<div id="sidebar" class="leaflet-sidebar collapsed">
 
-      <div id="web-map-site">
-        <div class="boxed">
-          <div class="row">
-            <div class="col-md-9" id="mapContainer">
-                <div id="map"></div></div>
-                  <div class="col-md-3" id="menuc" style="display: inline-block; max-height: 739px;">
-                    <div id="menuc">
-                      <div class="centered-text">
-                        <div class="centered-text Bienvenidos">¡Bienvenidos!</div>
-                        <div class="centered-text">Mapa de Sitios de significación cultural</div>
-                      </div>
-                    <label for="sel_Localidad" class="centered-text Sel-localidad">Seleccionar localidad</label>
-                  </div>
-                  <div id="button-container">
+  <!-- nav tabs -->
+  <div class="leaflet-sidebar-tabs">
+      <!-- top aligned tabs -->
+      <ul role="tablist">
+          <li><a href="#Intro" role="tab"><i class='bx bxs-home' style="font-size: 18px;"></i></i></a></li>
+          <li><a href="#home" role="tab"><i class='bx bxs-category' style="font-size: 18px;"></i></i></a></li>
+          <li><a href="#descripcion" role="tab"><i class='bx bx-book-open' style="font-size: 18px;"></i></a></li>
+          <li><a href="#descargas" role="tab"><i class='bx bx-download' style="font-size: 18px;"></i></a></li>
+      </ul>
+  </div>
 
-                    <div class="button-container" role="group" aria-label="Localidades" style="top: 100px; width: 100%; padding-right: 0.2%;">
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Sibaya" onclick="toggleLocalidad(this)">Sibaya</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Limaxiña" onclick="toggleLocalidad(this)">Limaxiña</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Iquiuca" onclick="toggleLocalidad(this)">Iquiuca</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Quipisca" onclick="toggleLocalidad(this)">Quipisca</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Mocha" onclick="toggleLocalidad(this)">Mocha</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Huaviña" onclick="toggleLocalidad(this)">Huaviña</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Laonzana" onclick="toggleLocalidad(this)">Laonzana</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Huasquiña" onclick="toggleLocalidad(this)">Huasquiña</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Sotoca" onclick="toggleLocalidad(this)">Sotoca</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Sipiza" onclick="toggleLocalidad(this)">Sipiza</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Mamiña" onclick="toggleLocalidad(this)">Mamiña</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Chusmiza" onclick="toggleLocalidad(this)">Chumiza</button>
-                      <button type="button" class="btn-custom localidad-button" data-localidad="Macaya" onclick="toggleLocalidad(this)">Macaya</button>
-                      <button type="button" id="seleccionar-todo" class="btn-custom-all localidad-button-all" onclick="seleccionarTodo()">Seleccionar Todo</button>
-                    </div></div>
-                    <label for="sel_Localidad" class="Sel-categoria">Seleccionar categorias</label>
-                    <div id="select-container">
-
-                      <div class="button-container-cat" role="group" aria-label="Localidades" style="top: 150px; width: 100%; padding-right: 0.2%;">
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Vertiente" onclick="toggleCategoria(this)">Vertiente</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Área de cultivos" onclick="toggleCategoria(this)">Área de cultivos</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Asentamientos" onclick="toggleCategoria(this)">Asentamientos</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Cerro Ceremonial o interfluvio" onclick="toggleCategoria(this)">Cerro Ceremonial o interfluvio</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de conflicto" onclick="toggleCategoria(this)">Sitio de conflicto</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Minera" onclick="toggleCategoria(this)">Minera</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Red vial" onclick="toggleCategoria(this)">Red vial</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio Religioso" onclick="toggleCategoria(this)">Sitio Religioso</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sector agrícola" onclick="toggleCategoria(this)">Sector agrícola</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sector simbólico" onclick="toggleCategoria(this)">Sector simbólico</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio arqueológico" onclick="toggleCategoria(this)">Sitio arqueológico</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de actividad económica" onclick="toggleCategoria(this)">Sitio de actividad económica</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de aprovechamiento hídrico" onclick="toggleCategoria(this)">Sitio de aprovechamiento hídrico</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de aprovechamiento hídrico (Conflictos)" onclick="toggleCategoria(this)">Sitio de aprovechamiento hídrico (Conflictos)</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitios de ocupación histórica" onclick="toggleCategoria(this)">Sitios de ocupación histórica</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Otros" onclick="toggleCategoria(this)">Otros</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de paso" onclick="toggleCategoria(this)">Sitio de paso</button>
-                        <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sector Pastoril - Ganadero" onclick="toggleCategoria(this)">Sector Pastoril - Ganadero</button>
-                        <button type="button" id="seleccionar-todo-cat" class="btn-custom-all categorias-button-all" onclick="seleccionarTodo()">Seleccionar Todo</button>
-                        <button id="resetButton" class="reset-button" onclick="resetAll">Limpiar filtros</button></div>
-                      </div>
-                    </div>
-                  </div>
-          </div>
-        </div>
+  <!-- panel content -->
+  <div class="leaflet-sidebar-content">
+    <div class="leaflet-sidebar-pane" id="Intro">
+      <h1 class="leaflet-sidebar-header" style="text-align: center;">
+          ¡BIENVENIDO! 
+          <span class="leaflet-sidebar-close"><i class="fa fa-caret-right" style="color: #fff !important;"></i></span>
+      </h1>
+      <div class="textoborde" style="border: 2px solid purple; margin-top: 20px; padding: 5px;">
+      <P style="width: 100%; font-size: 20px; text-align: justify; padding-top: 5px; padding: 10px;">
+        El sitio web tiene como objetivo el exponer los diversos sitios de significación 
+        cultural que se pueden encontrar en la comuna de Tarapapá, los cuales se encuentran 
+        georreferenciados en el mapa.
+      </P>
+      <P style="width: 100%; font-size: 20px; text-align: justify; padding-top: 20px;"> 
+        Encontraras en este menu los siguientes iconos:
+      </P>
+      <div class="iconosinfo" style="display: flex; justify-content: space-between; padding: 5px;">
+        <a href="#home" role="tab" style="text-decoration: none; color: inherit; display: inline-block; text-align: center;">
+          <i class="bx bxs-category" style="font-size: 30px;"></i>
+          <p style="margin: 0;">Categorias</p>
+        </a>
+        <a href="#descripcion" style="text-decoration: none; color: inherit; display: inline-block; text-align: center;">
+          <i class="bx bx-book-open" style="font-size: 30px;"></i>
+          <p style="margin: 0;">Descripción</p>
+        </a>
+        <a href="#descargas" style="text-decoration: none; color: inherit; display: inline-block; text-align: center;">
+          <i class="bx bx-download" style="font-size: 30px;"></i>
+          <p style="margin: 0;">Descargas</p>
+        </a>
       </div>
+      </div>
+     
+  </div> 
+    
+    
+    <div class="leaflet-sidebar-pane" id="home">
+          <h1 class="leaflet-sidebar-header">
+              Selección de datos
+              <span class="leaflet-sidebar-close"><i class="fa fa-caret-right" style="color: #fff !important;"></i></span>
+          </h1>
+          <label for="sel_Localidad" class="centered-text Sel-localidad" style="border-bottom: 1px solid gray;padding-bottom: 1px;">Localidades</label>
+            <div id="button-container" style="padding-top: 2px;">
+
+              <div class="button-container" role="group" aria-label="Localidades" style="top: 100px; width: 100%; padding-right: 0.2%; padding-bottom: 2px;">
+                <button type="button" class="btn-custom localidad-button" data-localidad="Sibaya" onclick="toggleLocalidad(this)">Sibaya</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Limaxiña" onclick="toggleLocalidad(this)">Limaxiña</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Iquiuca" onclick="toggleLocalidad(this)">Iquiuca</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Quipisca" onclick="toggleLocalidad(this)">Quipisca</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Mocha" onclick="toggleLocalidad(this)">Mocha</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Huaviña" onclick="toggleLocalidad(this)">Huaviña</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Laonzana" onclick="toggleLocalidad(this)">Laonzana</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Huasquiña" onclick="toggleLocalidad(this)">Huasquiña</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Sotoca" onclick="toggleLocalidad(this)">Sotoca</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Sipiza" onclick="toggleLocalidad(this)">Sipiza</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Mamiña" onclick="toggleLocalidad(this)">Mamiña</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Chusmiza" onclick="toggleLocalidad(this)">Chumiza</button>
+                <button type="button" class="btn-custom localidad-button" data-localidad="Macaya" onclick="toggleLocalidad(this)">Macaya</button>
+                <button type="button" id="seleccionar-todo" class="btn-custom-all localidad-button-all" onclick="seleccionarTodo()">Seleccionar Todo</button>
+              </div></div>
+              <label for="sel_Localidad" class="Sel-categoria" style="border-bottom: 1px solid gray;padding-bottom: 1px;border-top: 1px solid gray; padding-top: 2px;">Categorias</label>
+              <div id="select-container" style="padding-top: 5px;">
+
+                <div class="button-container-cat" role="group" aria-label="Localidades" style="top: 150px; width: 100%; padding-right: 0.2%;">
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Vertiente" onclick="toggleCategoria(this)">Vertiente</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Área de cultivos" onclick="toggleCategoria(this)">Área de cultivos</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Asentamientos" onclick="toggleCategoria(this)">Asentamientos</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Cerro Ceremonial o interfluvio" onclick="toggleCategoria(this)">Cerro Ceremonial o interfluvio</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de conflicto" onclick="toggleCategoria(this)">Sitio de conflicto</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Minera" onclick="toggleCategoria(this)">Minera</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Red vial" onclick="toggleCategoria(this)">Red vial</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio Religioso" onclick="toggleCategoria(this)">Sitio Religioso</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sector agrícola" onclick="toggleCategoria(this)">Sector agrícola</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sector simbólico" onclick="toggleCategoria(this)">Sector simbólico</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio arqueológico" onclick="toggleCategoria(this)">Sitio arqueológico</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de actividad económica" onclick="toggleCategoria(this)">Sitio de actividad económica</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de aprovechamiento hídrico" onclick="toggleCategoria(this)">Sitio de aprovechamiento hídrico</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de aprovechamiento hídrico (Conflictos)" onclick="toggleCategoria(this)">Sitio de aprovechamiento hídrico (Conflictos)</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitios de ocupación histórica" onclick="toggleCategoria(this)">Sitios de ocupación histórica</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Otros" onclick="toggleCategoria(this)">Otros</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sitio de paso" onclick="toggleCategoria(this)">Sitio de paso</button>
+                  <button type="button" class="btn-custom-cat categorias-button" data-categoria="Sector Pastoril - Ganadero" onclick="toggleCategoria(this)">Sector Pastoril - Ganadero</button>
+                  <button type="button" id="seleccionar-todo-cat" class="btn-custom-all-cat categorias-button-all" onclick="seleccionarTodo()">Seleccionar Todo</button>
+                  <button id="resetButton" class="reset-button" onclick="resetAll">Limpiar filtros</button></div>
+          </div></div>
+
+      <div class="leaflet-sidebar-pane" id="descripcion">
+          <h1 class="leaflet-sidebar-header">
+              Descripción de sitios
+              <span class="leaflet-sidebar-close"><i class="fa fa-caret-right" style="color: #fff !important;"></i></span>
+          </h1>
+          <p style="text-align: justify; padding: 20px;border-bottom: 1px solid gray;">No se ha seleccionado un sitio en el mapa</p>
+      </div>
+
+      <div class="leaflet-sidebar-pane" id="descargas">
+        <h1 class="leaflet-sidebar-header">
+            Descargas
+            <span class="leaflet-sidebar-close"><i class="fa fa-caret-right" style="color: #fff !important;"></i></span>
+        </h1>
+        <div class="textodesc" style="font-size: 20px; text-align: justify; padding-top: 5px; padding: 10px;">
+        <a href="https://sites.google.com/view/ssc-web-map-tarapaca/descargas/shapefiles" style="text-decoration: none; color: inherit;">
+          <span style="display: block; margin-bottom: 20px; border-bottom: 1px solid gray;">
+            <i class='bx bx-shape-triangle' style="font-size: 40px !important; vertical-align: middle;"></i>
+            <p style="display: inline-block; vertical-align: middle;padding-top: 20px">Shapefiles</p>
+          </span>
+        </a>
+        <a href="https://sites.google.com/view/ssc-web-map-tarapaca/descargas/documentos" style="text-decoration: none; color: inherit;">
+          <span style="display: block; margin-bottom: 20px; border-bottom: 1px solid gray;">
+            <i class='bx bxs-file-pdf' style="font-size: 40px !important; vertical-align: middle;"></i>
+            <p style="display: inline-block; vertical-align: middle;padding-top: 20px">Documentos</p>
+          </span>
+        </a>
+        <a href="https://sites.google.com/view/ssc-web-map-tarapaca/descargas/imagenes" style="text-decoration: none; color: inherit;">
+          <span style="display: block; margin-bottom: 20px; border-bottom: 1px solid gray;">
+            <i class='bx bx-image' style="font-size: 40px !important; vertical-align: middle;"></i>
+            <p style="display: inline-block; vertical-align: middle;padding-top: 20px;">Imágenes</p>
+          </span>
+        </a>
+        <a href="https://sites.google.com/view/ssc-web-map-tarapaca/descargas" style="text-decoration: none; color: inherit;">
+          <span style="display: block; margin-bottom: 20px; text-align: center;">
+            <p style="display: inline-block; vertical-align: middle;padding-top: 20px;font-size: 18px !important; font-weight: 600;border-radius: 5px;">Ir a descargas</p>
+          </span>
+        </a>
+      </div>
+    </div>
+      
+  </div>
+</div>
+<div id="map"></div>
 
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
@@ -436,7 +531,6 @@
         <script src="data/SitiosSigCultural_2.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-        <script src="data/SitiosSigCultural.js"></script>
         <script src="https://unpkg.com/leaflet-providers@1.12.0/leaflet-providers.js"></script>
         <script src="Leaflet-MiniMap-master/dist/Control.MiniMap.min.js"></script>
         <script src="js/leaflet-measure.js"></script>
@@ -445,17 +539,13 @@
         <script src="https://unpkg.com/proj4"></script>
         <script src="https://unpkg.com/proj4leaflet"></script>
         <script src="Leaflet.Legend-master/src/leaflet.legend.js"></script>
-
-        
-        
+        <script src="js/leaflet-sidebar.js"></script>
         
         <script>
           
           var map;
           var localidadesLayers = {};
           let removedLayers = [];
-
-          
       
           function filterByCategoria(categoria) {
           for (const localidad in localidadesLayers) {
@@ -605,14 +695,14 @@ function mymap() {
             case 'Sector Pastoril - Ganadero':
               return L.marker(latlng, {
                 icon: L.icon({
-                  iconUrl: 'legend/llama.png',
+                  iconUrl: 'legend/SPastorilIcon.png',
                   iconSize: [30.4, 30.4]
                 })
               });
             case 'Vertiente':
               return L.marker(latlng, {
                 icon: L.icon({
-                  iconUrl: 'legend/rio.png',
+                  iconUrl: 'legend/VertienteIcon.png',
                   iconSize: [30.4, 30.4]
                 })
               });
@@ -620,15 +710,47 @@ function mymap() {
         },
         onEachFeature: function (feature, layer) {
           if (feature.properties && feature.properties.Categorias) {
-            layer.bindPopup( "<strong> Sitio de significación cultural: </strong>"+ "<br/>" +"<strong> Nombre: </strong>" + feature.properties.Nombre + "<br/>" + "<strong> Localidad: </strong>" + feature.properties.Localidad + "<br/>" + "<strong> Categoría: </strong>" + feature.properties.Categorias);
-          }
-        }
-      });
-    }
+            layer.once('click', function() {
 
+              let description = "";
+
+              // Verifica si la propiedad Img existe antes de agregarla a la descripción
+              if (feature.properties.Img) {
+                description += "<img src='Img/"+feature.properties.Img+"' alt='Image' style='width:calc(100% - 10px); border: 2px solid black; height:50%;'>";
+              }
+
+              description += "<table style='width: calc(100% - 10px); height: calc(100% - 10px);'>" +
+                "<tr><td><strong>Nombre:</strong></td><td>" + feature.properties.Nombre + "</td></tr>" +
+                "<tr><td><strong>Localidad:</strong></td><td>" + feature.properties.Localidad + "</td></tr>" +
+                "<tr><td><strong>Categoría:</strong></td><td>" + feature.properties.Categorias + "</td></tr>";
+              
+              // Verifica si la propiedad Descrip existe antes de agregarla a la tabla
+              if (feature.properties.Descrip) {
+                description += "<tr><td><strong>Descripción:</strong></td><td>" + feature.properties.Descrip + "</td></tr>";
+              }
+              
+              description += "</table>";
+              
+              // Encuentra el elemento <p> dentro del div de descripción y actualiza su contenido
+              let descriptionP = document.querySelector('#descripcion p');
+              descriptionP.innerHTML = description;
+
+              let popupp = "<table style='border:1px solid black; width: calc(100% - 10px); height: calc(100% - 10px);'>" +
+              "<strong> Sitio de significación cultural </strong>" + "<br/>" +
+              "<strong> Nombre: </strong>" + feature.properties.Nombre + "<br/>" +
+              "<strong> Localidad: </strong>" + feature.properties.Localidad + "<br/>" +
+              "<strong> Categoría: </strong>" + feature.properties.Categorias + "</table>";
+
+              layer.bindPopup(popupp).openPopup();
+
+            });
+          }
+        }});
+      }
     localidadesLayers[localidad].addData(feature);
   }
-                var miniMap = new L.Control.MiniMap(L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    
+  var miniMap = new L.Control.MiniMap(L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
                 maxZoom: 20,
                 subdomains:['mt0','mt1','mt2','mt3']
                  }), {
@@ -638,20 +760,35 @@ function mymap() {
                 });
                 miniMap.addTo(map);
 
-                L.control.scale({ imperial: false }).addTo(map);
+  var sidebar = L.control.sidebar({ container: 'sidebar', position: 'right' })
+            .addTo(map)
+            .open('Intro');
 
-                var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+        // be notified when a panel is opened
+        sidebar.on('content', function (ev) {
+            switch (ev.id) {
+                case 'autopan':
+                sidebar.options.autopan = true;
+                break;
+                default:
+                sidebar.options.autopan = false;
+            }
+        });
+
+  L.control.scale({ imperial: false }).addTo(map);
+
+  var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
                 maxZoom: 20,
                 subdomains:['mt0','mt1','mt2','mt3']
                  });
 
-                 var baseMaps = {
+  var baseMaps = {
                   'Open Street Map': osm,
                   'Google Satellite': googleSat
                  }
-                 L.control.layers(baseMaps).addTo(map);
+  L.control.layers(baseMaps).addTo(map);
                  
-                 let measureControl = new L.control.measure({
+  let measureControl = new L.control.measure({
                   position: 'topleft',
                   primaryLengthUnit: 'meters',
                   secondaryLengthUnit: 'kilometers',
@@ -661,12 +798,12 @@ function mymap() {
                   completedColor: '#D41AD1'
               }).addTo(map);
 
-              L.Control.geocoder({
+  L.Control.geocoder({
                 position: 'topleft',
               }).addTo(map);
 
               // Luego, podemos agregar el control de coordenadas
-              L.control.coordinates({
+  L.control.coordinates({
                   position: "bottomright", // Posición del control en el mapa
                   decimalSeperator: ".", // Separador decimal
                   labelTemplateLat: "Latitud: {y}", // Plantilla de etiqueta para la latitud
@@ -680,7 +817,7 @@ function mymap() {
                   }
               }).addTo(map); // Agregar el control al mapa
               
-            var legend = L.control.Legend({
+  var legend = L.control.Legend({
               position: 'bottomleft',
               collapsed: true,
               title: 'Leyenda',
@@ -763,6 +900,21 @@ function mymap() {
                 }]
             }).addTo(map);
           
+            document.addEventListener('DOMContentLoaded', function() {
+              var legendToggle = document.querySelector('.leaflet-legend-toggle');
+
+              if (legendToggle) {
+                legendToggle.textContent = 'Leyenda';
+                legendToggle.style.width = '90px';
+                legendToggle.style.textAlign = 'center';
+                legendToggle.style.boxShadow = 'none';
+                legendToggle.style.borderRadius = '4px';
+                legendToggle.style.fontSize = '18px';
+                legendToggle.style.fontFamily = "Verdana, Geneva, Tahoma"
+              }
+            });
+
+
           }
             
     
