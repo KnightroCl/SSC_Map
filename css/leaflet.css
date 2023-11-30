@@ -409,6 +409,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-control-scale-line {
 	padding: 0 5px;
 	color: #333;
+	margin-left: 5px;
+	transition: var();
 	}
 .leaflet-control-attribution a {
 	text-decoration: none;
